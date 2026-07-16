@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Predict{% endblock title %}
+
+{% block extra_styles %}
+<style>
+body {
+    background-image: url("{% static 'carapp/image/predict_img.jpg' %}");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.93);
+    padding: 40px 35px;
+    border-radius: 20px;
+    width: 1050px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+}
+
+h1 {
+    color: #1e2937;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+label {
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+    display: block;
+}
+
+input, select {
+    height: 48px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    padding: 0 15px;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    outline: none;
+}
+
+.btn {
+    background: linear-gradient(135deg, #1e2937, #334155);
+    color: white;
+    height: 55px;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    margin-top: 15px;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(30, 41, 55, 0.4);
+}
+
+/* Result Box - Premium Look */
+.result-box {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    padding: 28px;
+    border-radius: 18px;
+    margin-top: 35px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.result-box h2 {
+    color: #166534;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.result-row:last-child {
+    border-bottom: none;
+}
+
+.result-label {
+    font-weight: 600;
+    color: #475569;
+}
+
+.result-value {
+    font-weight: 700;
+    color: #1e2937;
+}
+
+.price {
+    font-size: 26px;
+    font-weight: 800;
+    color: #166534;
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #86efac;
+}
+</style>
+{% endblock extra_styles %}
+
+{% block main-content %}
+
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="form-container text-center">
+
+        <h1>🚗 Car Price Predictor</h1>
+
+        <form action="{% url 'result' %}" method="get">
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>Car Name</label>
+                    <select name="n1" class="form-control" required>
+                        <option value="">-- Select Car Name --</option>
+                        <option value="Hyundai Santro Xing" {% if n1 == 'Hyundai Santro Xing' %}selected{% endif %}>Hyundai Santro Xing</option>
+                        <option value="Mahindra Jeep CL550" {% if n1 == 'Mahindra Jeep CL550' %}selected{% endif %}>Mahindra Jeep CL550</option>
+                        <option value="Hyundai Grand i10" {% if n1 == 'Hyundai Grand i10' %}selected{% endif %}>Hyundai Grand i10</option>
+                        <option value="Ford EcoSport Titanium" {% if n1 == 'Ford EcoSport Titanium' %}selected{% endif %}>Ford EcoSport Titanium</option>
+                        <option value="Ford Figo" {% if n1 == 'Ford Figo' %}selected{% endif %}>Ford Figo</option>
+                        <option value="Hyundai Eon" {% if n1 == 'Hyundai Eon' %}selected{% endif %}>Hyundai Eon</option>
+                        <option value="Maruti Suzuki Alto" {% if n1 == 'Maruti Suzuki Alto' %}selected{% endif %}>Maruti Suzuki Alto</option>
+                        <option value="Hyundai Elite i20" {% if n1 == 'Hyundai Elite i20' %}selected{% endif %}>Hyundai Elite i20</option>
+                        <option value="Mahindra Scorpio SLE" {% if n1 == 'Mahindra Scorpio SLE' %}selected{% endif %}>Mahindra Scorpio SLE</option>
+                        <option value="Maruti Suzuki Swift" {% if n1 == 'Maruti Suzuki Swift' %}selected{% endif %}>Maruti Suzuki Swift</option>
+                        <option value="Honda City" {% if n1 == 'Honda City' %}selected{% endif %}>Honda City</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Company</label>
+                    <input type="text" name="n2" class="form-control" 
+                           value="{{ n2|default:'' }}" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label>Year</label>
+                    <input type="number" name="n3" class="form-control" 
+                           value="{{ n3|default:'' }}" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label>KM Driven</label>
+                    <input type="number" name="n4" class="form-control" 
+                           value="{{ n4|default:'' }}" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label>Fuel Type</label>
+                    <select name="n5" class="form-control" required>
+                        <option value="Petrol" {% if n5 == 'Petrol' %}selected{% endif %}>Petrol</option>
+                        <option value="Diesel" {% if n5 == 'Diesel' %}selected{% endif %}>Diesel</option>
+                        <option value="CNG" {% if n5 == 'CNG' %}selected{% endif %}>CNG</option>
+                        <option value="LPG" {% if n5 == 'LPG' %}selected{% endif %}>LPG</option>
+                    </select>
+                </div>
+            </div>
+
+            <input type="submit" value="PREDICT PRICE" class="btn w-100">
+
+        </form>
+
+        <!-- ==================== PREMIUM RESULT BOX ==================== -->
+        {% if result2 %}
+        <div class="result-box">
+            <h2>✅ Your Car Price Prediction</h2>
+            
+            <div class="result-row">
+                <span class="result-label">Car Name</span>
+                <span class="result-value">{{ n1 }}</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Company</span>
+                <span class="result-value">{{ n2 }}</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Year</span>
+                <span class="result-value">{{ n3 }}</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">KM Driven</span>
+                <span class="result-value">{{ n4 }} km</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Fuel Type</span>
+                <span class="result-value">{{ n5 }}</span>
+            </div>
+
+            <div class="price">
+                {{ result2 }}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock main-content %}
